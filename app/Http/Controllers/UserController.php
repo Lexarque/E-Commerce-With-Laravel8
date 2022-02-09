@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller{
     
@@ -22,8 +23,10 @@ class UserController extends Controller{
     } catch (JWTException $e) {
             
         return response()->json(['error' => 'could_not_create_token', 500]);
-    }
-        return response()->json(compact('token'));
+    }   
+        $email = $request;
+        $type = DB::table('users')->where('email', $email)->value('type');//->get();
+        return response()->json(['token' => compact('token'), 'role' => $type, 'Status' => 'Login Success']);
     }
 
 public function register(Request $request){
@@ -32,6 +35,7 @@ public function register(Request $request){
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
         'password' => 'required|string|min:6|confirmed',
+        'type' => 'required|string'
     ]);
     
     if($validator->fails())
@@ -43,6 +47,7 @@ public function register(Request $request){
         'name' => $request->get('name'),
         'email' => $request->get('email'),
         'password' => Hash::make($request->get('password')),
+        'type' => $request->get('type'),
     ]);
 
     $token = JWTAuth::fromUser($user);
