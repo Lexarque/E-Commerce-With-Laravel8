@@ -55,9 +55,9 @@ class ordersController extends Controller
             ]);
     
             if($simpan){
-                return Response()->json(['status' => 1, 'message' => 'Sukses menambahkan order']);
+                return Response()->json(['status' => 1, 'message' => 'Success added order']);
             }else{
-                return Response()->json(['status'=> 0]);
+                return Response()->json(['status'=> 0, 'message' => 'Failed addding order']);
             }
     
     }
