@@ -16,7 +16,7 @@ class JwtMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, ...$type)
     {
         try
         {
@@ -31,7 +31,12 @@ class JwtMiddleware
                 return response()->json(['status' => 'Authorization Token not found']);
             }
         }
-        return $next($request);
+        if($user && in_array($user->type, $type)){
+            return $next($request);
+        }else{
+            return response()->json(['message' => 'Invalid Role'], 404);
+        }
+        
     }
 }
 

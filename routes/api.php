@@ -23,40 +23,29 @@ Route::post('/login', 'UserController@login');
 Route::get('/getAuthUser', 'UserController@getAuthenticatedUser');
 
 
-Route::group(['middleware' => ['jwt.verify']], function()
+Route::group(['middleware' => ['jwt.verify:SuperAdmin,Admin']], function()
 {
-    Route::group(['middleware' => ['api.superadmin']], function(){
-        Route::post('/customers', 'customersController@store');
-        Route::put('/customers/{id_customers}', 'customersController@update');
+   
+    Route::group(['middleware' => ['jwt.verify:SuperAdmin']], function()
+    {
         Route::delete('/customers/{id_customers}', 'customersController@destroy');
-
-        Route::post('/product', 'productController@store');
-        Route::put('/product/{id_product}', 'productController@update');
         Route::delete('/product/{id_product}', 'productController@destroy');
-
-        Route::post('/orders', 'ordersController@store');
-        Route::put('orders/{id_orders}', 'ordersController@update');
         Route::delete('/product/{id_orders}', 'ordersController@destroy');
-
-        Route::post('/detail_orders', 'detail_ordersController@store');
-        Route::put('/detail_orders/{id_detail_orders}', 'detail_ordersController@update');
         Route::delete('/detail_orders/{id_detail_orders}', 'detail_ordersController@destroy');
     });
-
-    Route::group(['middleware' => ['api.admin']], function(){
-        Route::post('/customers', 'customersController@store');
-        Route::put('/customers/{id_customers}', 'customersController@update');
-
-        Route::post('/product', 'productController@store');
-        Route::put('/product/{id_product}', 'productController@update');
     
-        Route::post('/orders', 'ordersController@store');
-        Route::put('orders/{id_orders}', 'ordersController@update');
-        
-        Route::post('/detail_orders', 'detail_ordersController@store');
-        Route::put('/detail_orders/{id_detail_orders}', 'detail_ordersController@update');
-    });
+    Route::post('/customers', 'customersController@store');
+    Route::put('/customers/{id_customers}', 'customersController@update');
 
+    Route::post('/product', 'productController@store');
+    Route::put('/product/{id_product}', 'productController@update');
+    
+    Route::post('/orders', 'ordersController@store');
+    Route::put('orders/{id_orders}', 'ordersController@update');
+        
+    Route::post('/detail_orders', 'detail_ordersController@store');
+    Route::put('/detail_orders/{id_detail_orders}', 'detail_ordersController@update');
+    
     Route::get('/customers', 'customersController@show');
     Route::get('/customers/{id_customers}', 'customersController@detail');
 

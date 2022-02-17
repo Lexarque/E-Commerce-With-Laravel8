@@ -17,14 +17,14 @@ class ordersController extends Controller
         return Response()->json($data_orders);
     }
 
-    public function detail($id_orders)
+    public function detail($id)
     {
-        if(orders::where('id_orders', $id_orders)->exists())
+        if(orders::where('id_orders', $id)->exists())
         {
             $data_orders = orders::join('customers', 'customers.id_customers', 'orders.id_customers')
         ->join('product', 'product.id_product', 'orders.id_product')
         ->select('orders.*', 'customers.nama', 'customers.telp', 'product.product_name', 'product.harga')
-        ->where('id_orders', $id_orders)
+        ->where('id_orders', $id)
         ->get();
         return Response()->json($data_orders);
         
